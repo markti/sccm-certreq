@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2026
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SccmRelayWeb", "SccmRelayWeb\SccmRelayWeb.csproj", "{C6123118-326B-44B5-92F3-4CBCBA200794}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SccmRelay.Interfaces", "SccmRelay.Interfaces\SccmRelay.Interfaces.csproj", "{C03B7A24-7018-425A-861C-56CDBD9B4AFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SccmRelay", "SccmRelay\SccmRelay.csproj", "{8007D49E-67A4-4371-99B4-DB93914B7323}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Server Agent", "1. Server Agent", "{E7F587DA-3D07-493A-849C-37CBAAACD754}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Server Web", "2. Server Web", "{05296A71-1246-4731-8887-838286D7D560}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Client", "3. Client", "{F2243267-6468-4E8E-9BB3-3D6D47C30DE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SccmRelayWebClient", "SccmRelayWebClient\SccmRelayWebClient.csproj", "{E41A765B-92EE-405D-9F85-8BA6021AE531}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SccmRelay.ConsoleApp", "SccmRelay.ConsoleApp\SccmRelay.ConsoleApp.csproj", "{B2A231F0-C084-4B20-87BC-C01C4058E54A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C6123118-326B-44B5-92F3-4CBCBA200794}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6123118-326B-44B5-92F3-4CBCBA200794}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6123118-326B-44B5-92F3-4CBCBA200794}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6123118-326B-44B5-92F3-4CBCBA200794}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C03B7A24-7018-425A-861C-56CDBD9B4AFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C03B7A24-7018-425A-861C-56CDBD9B4AFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C03B7A24-7018-425A-861C-56CDBD9B4AFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C03B7A24-7018-425A-861C-56CDBD9B4AFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8007D49E-67A4-4371-99B4-DB93914B7323}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8007D49E-67A4-4371-99B4-DB93914B7323}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8007D49E-67A4-4371-99B4-DB93914B7323}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8007D49E-67A4-4371-99B4-DB93914B7323}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E41A765B-92EE-405D-9F85-8BA6021AE531}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E41A765B-92EE-405D-9F85-8BA6021AE531}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E41A765B-92EE-405D-9F85-8BA6021AE531}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E41A765B-92EE-405D-9F85-8BA6021AE531}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2A231F0-C084-4B20-87BC-C01C4058E54A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2A231F0-C084-4B20-87BC-C01C4058E54A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2A231F0-C084-4B20-87BC-C01C4058E54A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2A231F0-C084-4B20-87BC-C01C4058E54A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C6123118-326B-44B5-92F3-4CBCBA200794} = {05296A71-1246-4731-8887-838286D7D560}
+		{C03B7A24-7018-425A-861C-56CDBD9B4AFD} = {E7F587DA-3D07-493A-849C-37CBAAACD754}
+		{8007D49E-67A4-4371-99B4-DB93914B7323} = {E7F587DA-3D07-493A-849C-37CBAAACD754}
+		{E41A765B-92EE-405D-9F85-8BA6021AE531} = {F2243267-6468-4E8E-9BB3-3D6D47C30DE8}
+		{B2A231F0-C084-4B20-87BC-C01C4058E54A} = {E7F587DA-3D07-493A-849C-37CBAAACD754}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6BB6BEB6-825C-45C4-B49B-72AF1A114588}
+	EndGlobalSection
+EndGlobal

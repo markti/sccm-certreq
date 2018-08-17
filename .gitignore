@@ -1,0 +1,17 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/packages
+/SccmRelay/bin
+/SccmRelay/obj
+/SccmRelay.ConsoleApp/bin
+/SccmRelay.ConsoleApp/obj
+/SccmRelay.Interfaces/bin
+/SccmRelay.Interfaces/obj
+/SccmRelayWeb/bin
+/SccmRelayWeb/obj
+/SccmRelayWeb/Properties/PublishProfiles
+/SccmRelayWebClient/bin
+/SccmRelayWebClient/obj

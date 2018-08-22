@@ -64,12 +64,19 @@ namespace SccmRelayWeb.Controllers
 
             Console.WriteLine("HOSTNAME: " + hostName);
 
+            var binding = new NetTcpRelayBinding();
+            binding.SendTimeout = TimeSpan.FromMinutes(10);
+            binding.ReceiveTimeout = TimeSpan.FromMinutes(10);
+            binding.OpenTimeout = TimeSpan.FromMinutes(10);
+            binding.CloseTimeout = TimeSpan.FromMinutes(10);
+
             var cf = new ChannelFactory<ICertificateGeneratorChannel>(
-               new NetTcpRelayBinding(),
+               binding,
                 new EndpointAddress(ServiceBusEnvironment.CreateServiceUri("sb", serviceNamespace, servicePath)));
 
             cf.Endpoint.Behaviors.Add(new TransportClientEndpointBehavior
             { TokenProvider = TokenProvider.CreateSharedAccessSignatureTokenProvider(serviceKeyName, serviceKey) });
+            
 
             using (var ch = cf.CreateChannel())
             {

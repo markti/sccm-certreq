@@ -4,6 +4,8 @@ using System.Text;
 using System.Net;
 using System.IO;
 using Newtonsoft.Json;
+using System.Threading;
+using System.Configuration;
 
 namespace SccmRelayWebClient
 {
@@ -15,34 +17,59 @@ namespace SccmRelayWebClient
     /// </summary>
     class Program
     {
-        private const string ClientSecret = "[[SECRET_GOES_HERE]]";
+        private static string ClientSecret = "";
+        private static string RemoteHost = "";
 
         static void Main(string[] args)
         {
-            if (args.Length < 1)
+            ClientSecret = ConfigurationManager.AppSettings["ApplicationKey"];
+            RemoteHost = ConfigurationManager.AppSettings["RemoteHost"];
+
+            bool isSuccess = false;
+            int retryCount = 0;
+            int maxRetryCount = 3;
+            int coolDownPeriodMinutes = 10;
+
+            int.TryParse(ConfigurationManager.AppSettings["RetryCount"], out maxRetryCount);
+            int.TryParse(ConfigurationManager.AppSettings["CooldownPeriod"], out coolDownPeriodMinutes);
+
+            TimeSpan cooldownPeriod = TimeSpan.FromMinutes(coolDownPeriodMinutes);
+
+            var machineName = Environment.MachineName;
+
+            // while it is not successful for the actual retries is less than our max, keep trying
+            while (!isSuccess && retryCount < maxRetryCount)
             {
-                Console.WriteLine("error");
+                isSuccess = GetCertificate();
+                retryCount++;
+                if(!isSuccess)
+                {
+                    LogEcxeption("retry attempt " + retryCount + " failed. sleeping for " + cooldownPeriod.TotalSeconds + " seconds");
+                    Thread.Sleep(cooldownPeriod);
+                }
             }
-            var hostName = args[0];
-
-            GetCertificate(hostName);
+            if(!isSuccess)
+            {
+                LogEcxeption("Retried " + maxRetryCount + " failed everytime");
+            }
         }
-
-        public static void GetCertificate(string hostName)
+        
+        public static bool GetCertificate()
         {
+            bool isSuccess = false;
             try
             {
-                //string x = null;
-
-                //x.Equals("hello");
-
-                LogCertificateRequested(hostName);
+                LogCertificateRequested();
 
                 System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls;
 
-                var postUri = new Uri(hostName + "/api/Certificate");
+                var postUri = new Uri(RemoteHost + "/api/Certificate");
 
                 var request = (HttpWebRequest)WebRequest.Create(postUri);
+
+                int timeoutMin = 2;
+                int.TryParse(ConfigurationManager.AppSettings["Timeout"], out timeoutMin);
+                request.Timeout = 1000 * 60 * timeoutMin;
 
                 var machineName = Environment.MachineName;
                 var postData = "{ 'hostName': '" + machineName + "', 'clientSecret': '" + ClientSecret + "' }";
@@ -62,30 +89,34 @@ namespace SccmRelayWebClient
                 var responseStream = response.GetResponseStream();
                 StreamReader sr = new StreamReader(responseStream);
 
-                if (File.Exists("client.pfx"))
+                var certOutFilename = ConfigurationManager.AppSettings["OutputFilename"];
+
+                if (File.Exists(certOutFilename))
                 {
-                    File.Delete("client.pfx");
+                    File.Delete(certOutFilename);
                 }
-                var fileStream = File.OpenWrite("client.pfx");
+                var fileStream = File.OpenWrite(certOutFilename);
 
                 CopyStream(responseStream, fileStream);
 
                 fileStream.Flush();
                 fileStream.Close();
 
-                LogCertificateReceived(hostName);
+                LogCertificateReceived();
 
+                isSuccess = true;
             }
             catch (Exception ex)
             {
-                LogEcxeption(hostName, ex);
+                LogEcxeption(ex.ToString());
             }
+            return isSuccess;
         }
-        public static void LogCertificateRequested(string hostName)
+        public static void LogCertificateRequested()
         {
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls;
 
-            var postUri = new Uri(hostName.Replace("https","http") + "/api/event/req");
+            var postUri = new Uri(RemoteHost.Replace("https","http") + "/api/event/req");
 
             var request = (HttpWebRequest)WebRequest.Create(postUri);
 
@@ -105,11 +136,11 @@ namespace SccmRelayWebClient
             var response = (HttpWebResponse)request.GetResponse();
         }
 
-        public static void LogCertificateReceived(string hostName)
+        public static void LogCertificateReceived()
         {
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls;
 
-            var postUri = new Uri(hostName.Replace("https", "http") + "/api/event/ack");
+            var postUri = new Uri(RemoteHost.Replace("https", "http") + "/api/event/ack");
 
             var request = (HttpWebRequest)WebRequest.Create(postUri);
 
@@ -129,12 +160,11 @@ namespace SccmRelayWebClient
             var response = (HttpWebResponse)request.GetResponse();
         }
 
-        public static void LogEcxeption(string hostName, Exception ex)
+        public static void LogEcxeption(string errorMessage)
         {
             System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls;
-            var errorMessage = ex.ToString();
 
-            var postUri = new Uri(hostName.Replace("https", "http") + "/api/event/error");
+            var postUri = new Uri(RemoteHost.Replace("https", "http") + "/api/event/error");
 
             var request = (HttpWebRequest)WebRequest.Create(postUri);
 
